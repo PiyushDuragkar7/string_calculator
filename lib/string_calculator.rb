@@ -4,7 +4,8 @@ class StringCalculator
     return 0 if nums.empty?
 
     delimiter, numbers = fetch_delimiter(nums)
-    sum_numbers(numbers, delimiter)
+    nums = check_neg_numbers(numbers, delimiter)
+    sum_numbers(nums) unless nums.empty?
   end
 
   def fetch_delimiter(numbers)
@@ -17,8 +18,14 @@ class StringCalculator
     [delimiter, numbers]
   end
 
-  def sum_numbers(numbers, delimiter)
+  def check_neg_numbers(numbers, delimiter)
     nums = numbers.split(delimiter).map(&:to_i)
+    negative_numbers = nums.select { |n| n < 0 }
+    raise "Negative numbers not allowed: #{negative_numbers.join(', ')}" unless negative_numbers.empty?
+    nums if negative_numbers.empty?
+  end
+
+  def sum_numbers(nums)
     nums.sum
   end
 end
